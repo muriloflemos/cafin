@@ -1,0 +1,13 @@
+version: "3"
+services:
+  database:
+    platform: linux/amd64
+    build:
+      context: database
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    volumes:
+      - cafin:/var/lib/mysql
+volumes:
+  cafin:
