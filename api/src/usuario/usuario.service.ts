@@ -51,12 +51,18 @@ export class UsuarioService {
     });
   }
 
-  findOne(id: number) {
+  findById(id: number) {
     return this.db.usuario.findUnique({
       where: { id },
       omit: {
         senha: true,
       },
+    });
+  }
+
+  findByUsername(username: string) {
+    return this.db.usuario.findUnique({
+      where: { username },
     });
   }
 
