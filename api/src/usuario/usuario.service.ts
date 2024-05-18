@@ -13,8 +13,17 @@ export class UsuarioService {
     const passwordHash = await PasswordHelper.hash(createUsuarioDto.senha);
     return await this.db.usuario.create({
       data: {
-        ...createUsuarioDto,
+        email: createUsuarioDto.email,
+        nome: createUsuarioDto.nome,
+        username: createUsuarioDto.username,
         senha: passwordHash,
+        roles: {
+          createMany: {
+            data: createUsuarioDto.roles.map((role: string) => ({
+              role,
+            })),
+          },
+        },
       },
       omit: {
         senha: true,
@@ -63,13 +72,32 @@ export class UsuarioService {
   findByUsername(username: string) {
     return this.db.usuario.findUnique({
       where: { username },
+      include: {
+        roles: true,
+      },
     });
   }
 
   update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    this.db.usuarioRoles.deleteMany({
+      where: {
+        usuarioId: id,
+      },
+    });
     return this.db.usuario.update({
       where: { id },
-      data: updateUsuarioDto,
+      data: {
+        email: updateUsuarioDto.email,
+        nome: updateUsuarioDto.nome,
+        username: updateUsuarioDto.username,
+        roles: {
+          createMany: {
+            data: updateUsuarioDto.roles.map((role: string) => ({
+              role,
+            })),
+          },
+        },
+      },
       omit: {
         senha: true,
       },

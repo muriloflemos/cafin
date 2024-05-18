@@ -16,7 +16,13 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     delete usuario.senha;
-    const payload = { sub: usuario.id, usuario };
+    const payload = {
+      sub: usuario.id,
+      usuario: {
+        ...usuario,
+        roles: usuario.roles.map((userRole) => userRole.role),
+      },
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

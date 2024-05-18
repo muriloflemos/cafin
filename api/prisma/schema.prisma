@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
 }
 
@@ -15,11 +15,21 @@ datasource db {
 }
 
 model Usuario {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  nome     String @db.VarChar(100)
-  username String @db.VarChar(50) @unique
-  senha    String @db.VarChar(20)
+  id       Int            @id @default(autoincrement())
+  email    String         @unique
+  nome     String         @db.VarChar(100)
+  username String         @unique @db.VarChar(50)
+  senha    String         @db.VarChar(20)
+  roles    UsuarioRoles[]
 
   @@map("usuario")
+}
+
+model UsuarioRoles {
+  id        Int     @id @default(autoincrement())
+  usuarioId Int
+  role      String  @db.VarChar(100)
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@map("usuario_roles")
 }
