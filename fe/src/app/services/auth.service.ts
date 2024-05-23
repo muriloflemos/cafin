@@ -7,13 +7,6 @@ export type AuthToken = {
   access_token: string;
 };
 
-export type Profile = {
-  exp: number;
-  iat: number;
-  sub: number;
-  usuario: Usuario;
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -55,10 +48,7 @@ export class AuthService {
   }
 
   profile(): Observable<Usuario> {
-    return this.apiService.get<Profile>('auth/profile')
-      .pipe(
-        map((response: Profile) => response.usuario),
-      );
+    return this.apiService.get<Usuario>('auth/profile');
   }
 
   getUser(): Promise<Usuario | null> {
@@ -70,7 +60,10 @@ export class AuthService {
           next: (usuario: Usuario) => {
             this._user = usuario;
             resolve(this._user);
-          }
+          },
+          error: () => {
+            resolve(null);
+          },
         })
       }
     });
