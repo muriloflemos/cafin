@@ -1,0 +1,39 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer
+    class="sidenav"
+    [attr.role]="'dialog'"
+    [mode]="'over'"
+  >
+    <mat-toolbar>
+      <img src="./assets/logo.jpeg" width="75%" class="logo" />
+    </mat-toolbar>
+    <mat-nav-list>
+      <div mat-subheader>Acesso</div>
+      <mat-divider></mat-divider>
+      <!-- <a mat-list-item *ngIf="isAdmin" routerLink="/usuarios" (click)="drawer.close()">
+        <mat-icon>people</mat-icon>
+        <span>Usuários</span>
+      </a> -->
+      <a mat-list-item routerLink="/logout" (click)="drawer.close()">
+        <mat-icon>logout</mat-icon>
+        <span>Sair</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <a routerLink="/">CAFIN</a>
+    </mat-toolbar>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
