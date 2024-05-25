@@ -8,16 +8,50 @@
       <img src="./assets/logo.jpeg" width="75%" class="logo" />
     </mat-toolbar>
     <mat-nav-list>
-      <div mat-subheader>Acesso</div>
+      <!-- <div mat-subheader class="sub-header">Acesso</div> -->
       <mat-divider></mat-divider>
-      <!-- <a mat-list-item *ngIf="isAdmin" routerLink="/usuarios" (click)="drawer.close()">
-        <mat-icon>people</mat-icon>
-        <span>Usuários</span>
-      </a> -->
-      <a mat-list-item routerLink="/logout" (click)="drawer.close()">
-        <mat-icon>logout</mat-icon>
-        <span>Sair</span>
+      <a mat-list-item routerLink="/usuarios" (click)="drawer.close()">
+        <div class="list-item">
+          <mat-icon>manage_accounts</mat-icon>
+          <span>Clientes</span>
+        </div>
       </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/usuarios" (click)="drawer.close()">
+        <div class="list-item">
+          <mat-icon>assignment_ind</mat-icon>
+          <span>Reavaliação</span>
+        </div>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/usuarios" (click)="drawer.close()">
+        <div class="list-item">
+          <mat-icon>stacked_line_chart</mat-icon>
+          <span>Evoluções</span>
+        </div>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/usuarios" (click)="drawer.close()">
+        <div class="list-item">
+          <mat-icon>notifications</mat-icon>
+          <span>Notificações</span>
+        </div>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item *ngIf="isAdmin" routerLink="/usuarios" (click)="drawer.close()">
+        <div class="list-item">
+          <mat-icon>people</mat-icon>
+          <span>Usuários</span>
+        </div>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/logout" (click)="drawer.close()">
+        <div class="list-item">
+          <mat-icon>logout</mat-icon>
+          <span>Sair</span>
+        </div>
+      </a>
+      <mat-divider></mat-divider>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

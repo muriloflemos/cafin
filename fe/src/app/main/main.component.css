@@ -21,15 +21,6 @@
   z-index: 1000;
 }
 
-:host mat-nav-list > a:first-child {
-  border-top: 1px solid var(--light-gray);
-}
-
-:host mat-nav-list > a {
-  border-bottom: 1px solid var(--light-gray);
-  color: var(--font-color-dark);
-}
-
 :host mat-nav-list > a span {
   margin-inline-start: 0.5rem;
 }
@@ -37,4 +28,15 @@
 :host .content {
   height: calc(100% - 64px - 4rem);
   padding: 1rem 2rem;
+}
+
+.sub-header {
+  color: var(--font-color-dark);
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--font-color-dark);
 }
