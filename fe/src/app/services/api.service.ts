@@ -4,6 +4,15 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
+const removeEmpty = (obj: any) => {
+  let newObj: any = {};
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] === Object(obj[key])) newObj[key] = removeEmpty(obj[key]);
+    else if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') newObj[key] = obj[key];
+  });
+  return newObj;
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,7 +24,7 @@ export class ApiService {
   }
 
   public get<T>(path: string, params: any = {}): Observable<T> {
-    return this.http.get<T>(this.baseUrl + path, { params });
+    return this.http.get<T>(this.baseUrl + path, { params: removeEmpty(params) });
   }
 
   public post<T>(path: string, body: any = {}): Observable<T> {

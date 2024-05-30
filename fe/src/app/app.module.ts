@@ -12,9 +12,7 @@ import { ApiInterceptor } from './services/api.interceptor';
 import { AlertModule } from './services/alert/alert.service';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

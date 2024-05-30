@@ -1,4 +1,5 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEmail, IsOptional, IsString, IsInt } from 'class-validator';
 
 export class FindUsuarioDto {
   @IsEmail()
@@ -12,4 +13,14 @@ export class FindUsuarioDto {
   @IsString()
   @IsOptional()
   username: string;
+
+  @IsInt()
+  @IsOptional()
+  @Type(() => Number)
+  skip: number = 0;
+
+  @IsInt()
+  @IsOptional()
+  @Type(() => Number)
+  take: number = 10;
 }

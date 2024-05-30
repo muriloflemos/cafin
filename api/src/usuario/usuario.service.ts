@@ -31,7 +31,7 @@ export class UsuarioService {
     });
   }
 
-  findAll(params: FindUsuarioDto) {
+  private buildWhere(params: FindUsuarioDto) {
     const where = {};
 
     if (params.email) {
@@ -52,11 +52,23 @@ export class UsuarioService {
       };
     }
 
+    return where;
+  }
+
+  count(params: FindUsuarioDto): Promise<number> {
+    return this.db.usuario.count({
+      where: this.buildWhere(params),
+    });
+  }
+
+  findAll(params: FindUsuarioDto, skip: number, take: number) {
     return this.db.usuario.findMany({
-      where,
+      where: this.buildWhere(params),
       omit: {
         senha: true,
       },
+      take: take !== null ? take : undefined,
+      skip: skip !== null ? skip : undefined,
     });
   }
 
