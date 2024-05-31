@@ -2,22 +2,22 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
 import { authGuard } from '../auth.guard';
-// import { AdminGuard, FinanceiroGuard, EstoqueGuard, ContasPagarGuard } from '../guards';
+import { adminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
-        canActivate: [authGuard],
         loadChildren: () =>
           import('../features/home/home.module').then((m) => m.HomeModule),
       },
       {
         path: 'usuarios',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadChildren: () =>
           import('../features/usuarios/usuarios.module').then((m) => m.UsuariosModule),
       },

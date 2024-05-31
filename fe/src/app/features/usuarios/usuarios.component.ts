@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, Subject, filter, map, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, switchMap, takeUntil, tap } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
+import { AlertService } from '../../services/alert/alert.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { Usuario, FindUsuarioDto } from '../../interfaces/usuario';
-import { PaginatedDTO } from 'src/app/interfaces/paginated.dto';
-import { PageEvent } from '@angular/material/paginator';
+import { PaginatedDTO } from '../../interfaces/paginated.dto';
 
 @Component({
   selector: 'app-usuarios',
@@ -59,6 +61,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private readonly usuarioService: UsuarioService,
     private readonly localStorageService: LocalStorageService,
+    private readonly router: Router,
+    private readonly alertService: AlertService,
   ) {}
 
   ngOnInit(): void {
@@ -106,12 +110,33 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.dataParams.next(params);
   }
 
+  addUsuario(): void {
+    this.router.navigate(['usuarios', 'form']);
+  }
+
   editar(usuario: Usuario): void {
-    // TO DO
+    this.router.navigate(['usuarios', 'form', usuario.id]);
   }
 
   excluir(usuario: Usuario): void {
-    // TO DO
+    const title = 'Excluir usuário';
+    const message = `Deseja realmente excluir o usuario ${usuario.nome}?`;
+    this.alertService.showYesNo(title, message)
+    .then((result: boolean) => {
+      if (result) {
+        this.usuarioService.remove(usuario.id)
+          .pipe(takeUntil(this.onDestroy$))
+          .subscribe({
+            complete: () => {
+              this.load();
+            },
+            error: (err) => {
+              const message = 'Não foi possível excluir o usuário!';
+              this.alertService.showError(title, message);
+            },
+          });
+      }
+    });
   }
 
   handlePageEvent(e: PageEvent) {

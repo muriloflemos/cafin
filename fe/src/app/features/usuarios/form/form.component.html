@@ -1,0 +1,61 @@
+<app-page-header title="Usuário">
+  <ng-container slot="actions">
+    <app-button title="Cancelar" icon="close" color="secondary" (click)="cancelar()"></app-button>
+    <app-button title="Salvar" icon="done" (click)="salvar()" [disabled]="!form.valid"></app-button>
+  </ng-container>
+</app-page-header>
+
+<form [formGroup]="form">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Informações</mat-card-subtitle>
+    </mat-card-header>
+
+    <br />
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="form-field-full">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field-full">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required>
+      </mat-form-field>
+
+      <div class="form-row" *ngIf="!editing">
+        <mat-form-field appearance="outline" class="form-field-full">
+          <mat-label>Senha</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="senha" [required]="!editing">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <span class="form-row-spacer"></span>
+
+        <mat-form-field appearance="outline" class="form-field-full">
+          <mat-label>Confirmar senha</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmarSenha" [required]="!editing">
+          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-pressed]="hideConfirmPassword">
+            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <br />
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Permissões</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-selection-list formControlName="roles">
+        <mat-list-option *ngFor="let role of roles" [value]="role.role">{{ role.label }}</mat-list-option>
+      </mat-selection-list>
+    </mat-card-content>
+  </mat-card>
+</form>

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DBService } from '../db.service';
 import { PasswordHelper } from '../helpers/password/password';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -7,6 +7,8 @@ import { FindUsuarioDto } from './dto/find-usuario.dto';
 
 @Injectable()
 export class UsuarioService {
+  private readonly logger = new Logger(UsuarioService.name);
+
   constructor(private readonly db: DBService) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
@@ -62,6 +64,9 @@ export class UsuarioService {
       },
       take: take !== null ? take : undefined,
       skip: skip !== null ? skip : undefined,
+      orderBy: {
+        nome: 'asc',
+      },
     });
   }
 
@@ -71,6 +76,13 @@ export class UsuarioService {
       omit: {
         senha: true,
       },
+      include: {
+        roles: {
+          select: {
+            role: true,
+          },
+        },
+      },
     });
   }
 
@@ -78,18 +90,22 @@ export class UsuarioService {
     return this.db.usuario.findUnique({
       where: { email },
       include: {
-        roles: true,
+        roles: {
+          select: {
+            role: true,
+          },
+        },
       },
     });
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    this.db.usuarioRoles.deleteMany({
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    await this.db.usuarioRoles.deleteMany({
       where: {
         usuarioId: id,
       },
     });
-    return this.db.usuario.update({
+    return await this.db.usuario.update({
       where: { id },
       data: {
         email: updateUsuarioDto.email,
@@ -108,8 +124,13 @@ export class UsuarioService {
     });
   }
 
-  remove(id: number) {
-    return this.db.usuario.delete({
+  async remove(id: number) {
+    await this.db.usuarioRoles.deleteMany({
+      where: {
+        usuarioId: id,
+      },
+    });
+    return await this.db.usuario.delete({
       where: { id },
       omit: {
         senha: true,

@@ -3,19 +3,23 @@ export enum Role {
   ADMIN = 'ADMIN',
 }
 
+export interface UsuarioRole {
+  role: Role;
+}
+
 export interface Usuario {
   id: number;
   email: string;
   nome: string;
   senha?: string;
-  roles: Role[],
+  roles: UsuarioRole[],
 }
 
-export interface CreateUsuarioDTO {
-  email: string;
-  nome: string;
-  senha: string;
-  roles: Role[];
+export interface SaveUsuarioDTO {
+  email?: string | null;
+  nome?: string | null;
+  senha?: string | null;
+  roles?: Role[] | string[] | null;
 }
 
 export interface FindUsuarioDto {

@@ -18,10 +18,7 @@ export class AuthService {
       delete usuario.senha;
       const payload = {
         sub: usuario.id,
-        usuario: {
-          ...usuario,
-          roles: usuario.roles.map((userRole) => userRole.role),
-        },
+        usuario,
       };
       return {
         access_token: await this.jwtService.signAsync(payload),

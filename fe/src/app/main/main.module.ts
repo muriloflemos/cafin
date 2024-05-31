@@ -6,10 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-
-
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
+
 @NgModule({
   declarations: [
     MainComponent

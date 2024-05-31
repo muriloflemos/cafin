@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { Usuario, Role } from '../interfaces/usuario';
+import { Usuario, Role, UsuarioRole } from '../interfaces/usuario';
 import { ApiService } from './api.service';
 
 export type AuthToken = {
@@ -70,6 +70,12 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this._user ? this._user.roles.includes(Role.ADMIN) : false;
+    return this._user ? this.hasRole(this._user.roles, Role.ADMIN) : false;
+  }
+
+  private hasRole(userRoles: UsuarioRole[], role: Role): boolean {
+    console.log(userRoles);
+    const index = userRoles.findIndex((userRole: UsuarioRole) => userRole.role === role);
+    return index >= 0;
   }
 }
