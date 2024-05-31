@@ -19,7 +19,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: SigninDto) {
-    return this.authService.signIn(signInDto.username, signInDto.senha);
+    return this.authService.signIn(signInDto.email, signInDto.senha);
   }
 
   @Get('profile')

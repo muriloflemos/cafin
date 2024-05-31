@@ -13,7 +13,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 })
 export class LoginComponent {
   form = this.formBuilder.group({
-    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     senha: ['', Validators.required],
   });
 
@@ -34,10 +34,10 @@ export class LoginComponent {
     }
 
     this.loading = true;
-    const { username, senha } = this.form.value;
-    if (!username || !senha) return;
+    const { email, senha } = this.form.value;
+    if (!email || !senha) return;
 
-    this.authService.login(username, senha).subscribe((result: AuthToken) => {
+    this.authService.login(email, senha).subscribe((result: AuthToken) => {
       this.localStorageService.clear();
       this.authService.registerToken(result.access_token);
       this.router.navigate(['']);

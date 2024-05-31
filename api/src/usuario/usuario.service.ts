@@ -15,7 +15,6 @@ export class UsuarioService {
       data: {
         email: createUsuarioDto.email,
         nome: createUsuarioDto.nome,
-        username: createUsuarioDto.username,
         senha: passwordHash,
         roles: {
           createMany: {
@@ -43,12 +42,6 @@ export class UsuarioService {
     if (params.nome) {
       where['nome'] = {
         contains: params.nome,
-      };
-    }
-
-    if (params.username) {
-      where['username'] = {
-        contains: params.username,
       };
     }
 
@@ -81,9 +74,9 @@ export class UsuarioService {
     });
   }
 
-  findByUsername(username: string) {
+  findByEmail(email: string) {
     return this.db.usuario.findUnique({
-      where: { username },
+      where: { email },
       include: {
         roles: true,
       },
@@ -101,7 +94,6 @@ export class UsuarioService {
       data: {
         email: updateUsuarioDto.email,
         nome: updateUsuarioDto.nome,
-        username: updateUsuarioDto.username,
         roles: {
           createMany: {
             data: updateUsuarioDto.roles.map((role: string) => ({

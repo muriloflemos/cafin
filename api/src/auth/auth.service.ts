@@ -12,8 +12,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(username: string, senha: string): Promise<any> {
-    const usuario = await this.usuarioService.findByUsername(username);
+  async signIn(email: string, senha: string): Promise<any> {
+    const usuario = await this.usuarioService.findByEmail(email);
     if (await PasswordHelper.compare(senha, usuario.senha)) {
       delete usuario.senha;
       const payload = {

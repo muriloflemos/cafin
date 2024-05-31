@@ -7,7 +7,6 @@ export interface Usuario {
   id: number;
   email: string;
   nome: string;
-  username: string;
   senha?: string;
   roles: Role[],
 }
@@ -15,7 +14,6 @@ export interface Usuario {
 export interface CreateUsuarioDTO {
   email: string;
   nome: string;
-  username: string;
   senha: string;
   roles: Role[];
 }
@@ -23,7 +21,6 @@ export interface CreateUsuarioDTO {
 export interface FindUsuarioDto {
   email?: string;
   nome?: string;
-  username?: string;
   skip?: number;
   take?: number;
 }

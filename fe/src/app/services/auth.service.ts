@@ -34,9 +34,9 @@ export class AuthService {
     return this.storage.getItem('token') != null;
   }
 
-  login(username: string, senha: string): Observable<AuthToken> {
+  login(email: string, senha: string): Observable<AuthToken> {
     const body = {
-      username,
+      email,
       senha,
     };
     return this.apiService.post('auth/login', body);

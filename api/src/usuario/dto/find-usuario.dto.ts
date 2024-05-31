@@ -10,10 +10,6 @@ export class FindUsuarioDto {
   @IsOptional()
   nome: string;
 
-  @IsString()
-  @IsOptional()
-  username: string;
-
   @IsInt()
   @IsOptional()
   @Type(() => Number)

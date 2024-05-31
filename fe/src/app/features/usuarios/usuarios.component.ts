@@ -23,7 +23,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = [
     'nome',
-    'username',
     'email',
     'actions',
   ];
@@ -99,9 +98,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   load(): void {
     const params: FindUsuarioDto = {};
-    const { nome, username, email } = this.form.value;
+    const { nome, email } = this.form.value;
     if (!!nome) params.nome = nome;
-    if (!!username) params.username = username;
     if (!!email) params.email = email;
     params.take = this.pageSize;
     params.skip = this.pageSize * this.pageIndex;
