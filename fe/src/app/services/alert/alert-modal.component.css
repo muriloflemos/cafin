@@ -8,6 +8,10 @@
   font-weight: bold;
 }
 
+:host h2 {
+  padding: 0;
+}
+
 :host .button-spacer {
   width: 2rem;
 }

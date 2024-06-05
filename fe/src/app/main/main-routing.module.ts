@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
 import { authGuard } from '../auth.guard';
 import { adminGuard } from '../guards/admin.guard';
+import { clienteGuard } from '../guards/cliente.guard';
 
 const routes: Routes = [
   {
@@ -20,6 +21,12 @@ const routes: Routes = [
         canActivate: [adminGuard],
         loadChildren: () =>
           import('../features/usuarios/usuarios.module').then((m) => m.UsuariosModule),
+      },
+      {
+        path: 'clientes',
+        canActivate: [clienteGuard],
+        loadChildren: () =>
+          import('../features/clientes/clientes.module').then((m) => m.ClientesModule),
       },
     ],
   },

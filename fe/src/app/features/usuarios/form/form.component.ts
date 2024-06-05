@@ -17,7 +17,7 @@ export class FormUsuarioComponent {
     senha: [''],
     confirmarSenha: [''],
     email: ['', [Validators.required, Validators.email]],
-    roles: [[Role.USER], Validators.required],
+    roles: [[Role.CLIENTE], Validators.required],
   });
 
   hidePassword = true;
@@ -26,7 +26,10 @@ export class FormUsuarioComponent {
   private userId: number = -1;
   roles: { label: string, role: Role }[] = [
     { label: 'Administrador', role: Role.ADMIN },
-    { label: 'Usuário', role: Role.USER },
+    { label: 'Cliente', role: Role.CLIENTE },
+    { label: 'Avaliação/Reavaliação', role: Role.AVALIACAO },
+    { label: 'Evoluções', role: Role.EVOLUCAO },
+    { label: 'Notificações', role: Role.NOTIFICACAO },
   ];
 
   constructor(
@@ -73,9 +76,16 @@ export class FormUsuarioComponent {
     }
 
     const { nome, email, senha, roles } = this.form.value;
+    let userRoles = [];
+
+    if (roles) {
+      for (const key in roles) {
+        userRoles.push(roles[key]);
+      }
+    }
 
     if (this.editing) {
-      const data: SaveUsuarioDTO = { nome, email, roles };
+      const data: SaveUsuarioDTO = { nome, email, roles: userRoles };
       this.usuarioService
         .update(this.userId, data)
         .subscribe({
@@ -85,7 +95,7 @@ export class FormUsuarioComponent {
           error: (error) => this.showError(error),
         });
     } else {
-      const data: SaveUsuarioDTO = { nome, email, senha, roles };
+      const data: SaveUsuarioDTO = { nome, email, senha, roles: userRoles };
       this.usuarioService
         .create(data)
         .subscribe({

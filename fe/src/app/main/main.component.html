@@ -8,43 +8,52 @@
       <img src="./assets/logo.png" height="70" class="logo" />
     </mat-toolbar>
     <mat-nav-list>
-      <!-- <div mat-subheader class="sub-header">Acesso</div> -->
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/" (click)="drawer.close()">
-        <div class="list-item">
-          <mat-icon>manage_accounts</mat-icon>
-          <span>Clientes</span>
-        </div>
-      </a>
-      <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/" (click)="drawer.close()">
-        <div class="list-item">
-          <mat-icon>assignment_ind</mat-icon>
-          <span>Avaliação/Reavaliação</span>
-        </div>
-      </a>
-      <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/" (click)="drawer.close()">
-        <div class="list-item">
-          <mat-icon>stacked_line_chart</mat-icon>
-          <span>Evoluções</span>
-        </div>
-      </a>
-      <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/" (click)="drawer.close()">
-        <div class="list-item">
-          <mat-icon>notifications</mat-icon>
-          <span>Notificações</span>
-        </div>
-      </a>
-      <mat-divider></mat-divider>
-      <a mat-list-item *ngIf="isAdmin" routerLink="/usuarios" (click)="drawer.close()">
-        <div class="list-item">
-          <mat-icon>people</mat-icon>
-          <span>Usuários</span>
-        </div>
-      </a>
-      <mat-divider></mat-divider>
+      <ng-container *ngIf="isAdmin || hasClienteRole">
+        <a mat-list-item routerLink="/clientes" (click)="drawer.close()">
+          <div class="list-item">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>Clientes</span>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </ng-container>
+      <ng-container *ngIf="isAdmin || hasAvaliacaoRole">
+        <a mat-list-item routerLink="/" (click)="drawer.close()">
+          <div class="list-item">
+            <mat-icon>assignment_ind</mat-icon>
+            <span>Avaliação/Reavaliação</span>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </ng-container>
+      <ng-container *ngIf="isAdmin || hasEvolucoesRole">
+        <a mat-list-item routerLink="/" (click)="drawer.close()">
+          <div class="list-item">
+            <mat-icon>stacked_line_chart</mat-icon>
+            <span>Evoluções</span>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </ng-container>
+      <ng-container *ngIf="isAdmin || hasNotificacoesRole">
+        <a mat-list-item routerLink="/" (click)="drawer.close()">
+          <div class="list-item">
+            <mat-icon>notifications</mat-icon>
+            <span>Notificações</span>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </ng-container>
+      <ng-container *ngIf="isAdmin">
+        <a mat-list-item routerLink="/usuarios" (click)="drawer.close()">
+          <div class="list-item">
+            <mat-icon>people</mat-icon>
+            <span>Usuários</span>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </ng-container>
       <a mat-list-item routerLink="/logout" (click)="drawer.close()">
         <div class="list-item">
           <mat-icon>logout</mat-icon>
@@ -68,6 +77,8 @@
     </mat-toolbar>
     <div class="content">
       <router-outlet></router-outlet>
+      <br />
+      <div style="height: 1rem;"></div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

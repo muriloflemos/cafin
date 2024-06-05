@@ -1,4 +1,4 @@
-<app-page-header title="Usuários"></app-page-header>
+<app-page-header title="Clientes"></app-page-header>
 
 <mat-card class="section">
   <form [formGroup]="form" class="filtro">
@@ -39,13 +39,21 @@
       <ng-container matColumnDef="nome">
         <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Nome</th>
         <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.nome }} </td>
-        <!-- <td mat-footer-cell *matFooterCellDef></td> -->
       </ng-container>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Email</th>
-        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.email }} </td>
-        <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+      <ng-container matColumnDef="telefone">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Telefone</th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.telefone }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataNascimento">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Data Nascimento</th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.dataNascimento | date:'shortDate':'utc' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cpf">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>CPF</th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.cpf }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -61,15 +69,13 @@
             </button>
           </div>
         </td>
-        <!-- <td mat-footer-cell *matFooterCellDef></td> -->
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <!-- <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr> -->
 
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="3">Nenhum registro encontrado</td>
+        <td class="mat-cell empty" colspan="4">Nenhum registro encontrado</td>
       </tr>
     </table>
 
@@ -94,7 +100,7 @@
   mat-fab
   color="primary"
   class="floating-button"
-  (click)="addUsuario()"
+  (click)="add()"
 >
   <mat-icon>add</mat-icon>
 </button>

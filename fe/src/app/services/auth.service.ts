@@ -70,11 +70,14 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this._user ? this.hasRole(this._user.roles, Role.ADMIN) : false;
+    return this._user ? this.hasUserRole(this._user.roles, Role.ADMIN) : false;
   }
 
-  private hasRole(userRoles: UsuarioRole[], role: Role): boolean {
-    console.log(userRoles);
+  hasRole(role: Role): boolean {
+    return this._user ? this.hasUserRole(this._user.roles, role) : false;
+  }
+
+  private hasUserRole(userRoles: UsuarioRole[], role: Role): boolean {
     const index = userRoles.findIndex((userRole: UsuarioRole) => userRole.role === role);
     return index >= 0;
   }
