@@ -15,11 +15,12 @@ datasource db {
 }
 
 model Usuario {
-  id    Int            @id @default(autoincrement())
-  email String         @unique
-  nome  String         @db.VarChar(100)
-  senha String         @db.VarChar(100)
-  roles UsuarioRoles[]
+  id        Int            @id @default(autoincrement())
+  email     String         @unique
+  nome      String         @db.VarChar(100)
+  senha     String         @db.VarChar(100)
+  roles     UsuarioRoles[]
+  evolucoes Evolucao[]
 
   @@map("usuario")
 }
@@ -34,20 +35,35 @@ model UsuarioRoles {
 }
 
 model Cliente {
-  id                          Int       @id @default(autoincrement())
-  nome                        String    @db.VarChar(200)
-  telefone                    String?   @db.VarChar(30)
-  endereco                    String?   @db.VarChar(200)
-  estadoCivil                 String?   @db.VarChar(50)
+  id                          Int        @id @default(autoincrement())
+  nome                        String     @db.VarChar(200)
+  telefone                    String?    @db.VarChar(30)
+  endereco                    String?    @db.VarChar(200)
+  estadoCivil                 String?    @db.VarChar(50)
   filhos                      Int?
-  email                       String?   @db.VarChar(200)
-  dataNascimento              DateTime? @db.Date()
-  cpf                         String?   @db.VarChar(20)
-  rg                          String?   @db.VarChar(200)
-  diagnosticoClinico          String?   @db.LongText
-  diagnosticoFisioterapeutico String?   @db.LongText
-  createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @updatedAt @default(now())
+  email                       String?    @db.VarChar(200)
+  dataNascimento              DateTime?  @db.Date()
+  cpf                         String?    @db.VarChar(20)
+  rg                          String?    @db.VarChar(200)
+  diagnosticoClinico          String?    @db.LongText
+  diagnosticoFisioterapeutico String?    @db.LongText
+  createdAt                   DateTime   @default(now())
+  updatedAt                   DateTime   @default(now()) @updatedAt
+  Evolucao                    Evolucao[]
 
   @@map("cliente")
+}
+
+model Evolucao {
+  id        Int       @id @default(autoincrement())
+  data      DateTime? @db.DateTime()
+  descricao String?   @db.LongText
+  clienteId Int
+  usuarioId Int
+  cliente   Cliente   @relation(fields: [clienteId], references: [id])
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id])
+  createdAt                   DateTime   @default(now())
+  updatedAt                   DateTime   @default(now()) @updatedAt
+
+  @@map("evolucao")
 }

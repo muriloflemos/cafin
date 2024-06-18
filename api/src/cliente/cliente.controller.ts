@@ -47,11 +47,11 @@ export class ClienteController {
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateClienteDto: UpdateClienteDto) {
-    return this.clienteService.update(+id, updateClienteDto);
+    return this.clienteService.update(Number(id), updateClienteDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.clienteService.remove(+id);
+    return this.clienteService.remove(Number(id));
   }
 }

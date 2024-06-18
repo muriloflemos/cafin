@@ -4,6 +4,7 @@ import { MainComponent } from './main.component';
 import { authGuard } from '../auth.guard';
 import { adminGuard } from '../guards/admin.guard';
 import { clienteGuard } from '../guards/cliente.guard';
+import { evolucaoGuard } from '../guards/evolucao.guard';
 
 const routes: Routes = [
   {
@@ -27,6 +28,12 @@ const routes: Routes = [
         canActivate: [clienteGuard],
         loadChildren: () =>
           import('../features/clientes/clientes.module').then((m) => m.ClientesModule),
+      },
+      {
+        path: 'evolucoes',
+        canActivate: [evolucaoGuard],
+        loadChildren: () =>
+          import('../features/evolucoes/evolucoes.module').then((m) => m.EvolucoesModule),
       },
     ],
   },

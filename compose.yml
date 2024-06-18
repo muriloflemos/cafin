@@ -5,9 +5,26 @@ services:
     build:
       context: database
       dockerfile: Dockerfile
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "--password=root"]
+      timeout: 20s
+      retries: 10
     ports:
       - "3306:3306"
     volumes:
       - cafin:/var/lib/mysql
+  app:
+    platform: linux/amd64
+    mem_limit: 1.5Gb
+    mem_reservation: 128M
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "81:3000"
+    environment:
+      DATABASE_URL: "mysql://root:root@database:3306/cafin"
+    depends_on:
+      database:
+        condition: service_healthy
 volumes:
   cafin:

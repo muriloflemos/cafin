@@ -1,0 +1,133 @@
+.section {
+  padding: 0 1rem;
+  padding-top: 1rem;
+  margin-block-end: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.filtro {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.filtro > *:not(:last-child) {
+  margin-inline-end: 1rem;
+}
+
+.filtro > * {
+  margin-block-end: 1rem;
+}
+
+.filtro ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.filtro__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.filtro__actions button:not(:last-child) {
+  margin-inline-end: 1rem;
+}
+
+.filtro__actions ::ng-deep > button {
+  height: 3rem;
+}
+
+.table-wrapper {
+  overflow-x: scroll;
+  padding: 0;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.data-table {
+  width: 100%;
+}
+
+.data-table__cell {
+  white-space: nowrap;
+  padding: 0 1rem;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.data-table__cell.small {
+  min-width: 3rem;
+}
+
+.data-table__cell.medium {
+  min-width: 8rem;
+}
+
+.data-table__cell.large {
+  min-width: 15rem;
+}
+
+.data-table__cell.xlarge {
+  min-width: 20rem;
+}
+
+.data-table__cell__actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.loading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.loading mat-spinner {
+  margin-inline-end: 0.5rem;
+}
+
+.empty {
+  text-align: center;
+  padding: 1rem;
+}
+
+.floating-button {
+  position: fixed;
+  right: 2rem;
+  bottom: 1rem;
+  z-index: 1000;
+}
+
+.select-all {
+  padding: 0.5rem 1rem 0.5rem;
+  width: 100%;
+}
+
+mat-paginator ::ng-deep .mat-mdc-paginator-container {
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  min-width: 30rem;
+}
