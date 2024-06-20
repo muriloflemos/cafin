@@ -84,4 +84,23 @@ export class ClienteService {
       where: { id },
     });
   }
+
+  async addContadorEvolucao(id: number, count: number = 1) {
+    try {
+      const cliente = await this.findById(id);
+      return await this.db.cliente.update({
+        where: { id },
+        data: { contadorEvolucoes: cliente.contadorEvolucoes + count },
+      });
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
+
+  async updateContadorEvolucao(id: number, contadorEvolucoes: number) {
+    return await this.db.cliente.update({
+      where: { id },
+      data: { contadorEvolucoes },
+    });
+  }
 }

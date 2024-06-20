@@ -21,6 +21,10 @@
   z-index: 1000;
 }
 
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
 :host mat-nav-list > a span {
   margin-inline-start: 0.5rem;
 }
@@ -39,4 +43,29 @@
   align-items: center;
   justify-content: flex-start;
   color: var(--font-color-dark);
+}
+
+.notification-list {
+  width: 15rem;
+  border: solid 1px var(--light-gray);
+  border-radius: 5px;
+  background: #fff;
+  padding: 0 1rem;
+  margin: 0;
+}
+
+.notification-list > li {
+  list-style-type: none;
+  border-bottom: solid 1px var(--light-gray);
+  padding: 1rem 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.notification-list > li:last-child {
+  border-bottom: none;
+}
+
+.notification-list > li.visto {
+  font-weight: normal;
 }

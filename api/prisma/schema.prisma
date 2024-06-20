@@ -15,12 +15,13 @@ datasource db {
 }
 
 model Usuario {
-  id        Int            @id @default(autoincrement())
-  email     String         @unique
-  nome      String         @db.VarChar(100)
-  senha     String         @db.VarChar(100)
-  roles     UsuarioRoles[]
-  evolucoes Evolucao[]
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  nome         String         @db.VarChar(100)
+  senha        String         @db.VarChar(100)
+  roles        UsuarioRoles[]
+  evolucoes    Evolucao[]
+  notificacoes Notificacao[]
 
   @@map("usuario")
 }
@@ -47,6 +48,7 @@ model Cliente {
   rg                          String?    @db.VarChar(200)
   diagnosticoClinico          String?    @db.LongText
   diagnosticoFisioterapeutico String?    @db.LongText
+  contadorEvolucoes           Int?
   createdAt                   DateTime   @default(now())
   updatedAt                   DateTime   @default(now()) @updatedAt
   Evolucao                    Evolucao[]
@@ -56,14 +58,27 @@ model Cliente {
 
 model Evolucao {
   id        Int       @id @default(autoincrement())
-  data      DateTime? @db.DateTime()
+  data      DateTime  @db.DateTime()
   descricao String?   @db.LongText
   clienteId Int
   usuarioId Int
   cliente   Cliente   @relation(fields: [clienteId], references: [id])
   usuario   Usuario   @relation(fields: [usuarioId], references: [id])
-  createdAt                   DateTime   @default(now())
-  updatedAt                   DateTime   @default(now()) @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 
   @@map("evolucao")
+}
+
+model Notificacao {
+  id        Int       @id @default(autoincrement()) 
+  tipo      String    @db.VarChar(100)
+  visto     Boolean
+  descricao String?   @db.VarChar(200)
+  conteudo  Json?
+  createdAt DateTime  @default(now())
+  usuarioId Int?
+  usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+
+  @@map("notificacao")
 }

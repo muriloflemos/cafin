@@ -4,20 +4,48 @@ import { CreateEvolucaoDto } from './dto/create-evolucao.dto';
 import { UpdateEvolucaoDto } from './dto/update-evolucao.dto';
 import { FindEvolucaoDto } from './dto/find-evolucao.dto';
 import { Usuario } from '../usuario/entities/usuario.entity';
+import { NotificacaoService } from '../notificacao/notificacao.service';
+import { ClienteService } from '../cliente/cliente.service';
 
 @Injectable()
 export class EvolucaoService {
   private readonly logger = new Logger(EvolucaoService.name);
 
-  constructor(private readonly db: DBService) {}
+  constructor(
+    private readonly db: DBService,
+    private readonly notificacaoService: NotificacaoService,
+    private readonly clienteService: ClienteService,
+  ) {}
 
   async create(data: CreateEvolucaoDto, usuario: Usuario) {
-    return await this.db.evolucao.create({
-      data: {
-        ...data,
-        usuarioId: usuario.id,
-      },
-    });
+    try {
+      const evolucao = await this.db.evolucao.create({
+        data: {
+          ...data,
+          usuarioId: usuario.id,
+        },
+      });
+
+      const cliente = await this.clienteService.addContadorEvolucao(
+        data.clienteId,
+      );
+
+      if (cliente.contadorEvolucoes % 15 === 0) {
+        await this.notificacaoService.create({
+          tipo: 'CONTADOR_EVOLUCAO',
+          descricao: `${cliente.nome} totalizou 15 evoluções.`,
+          conteudo: JSON.stringify({
+            cliente,
+            evolucao,
+          }),
+          usuarioId: null,
+        });
+      }
+
+      return evolucao;
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async update(id: number, data: UpdateEvolucaoDto) {

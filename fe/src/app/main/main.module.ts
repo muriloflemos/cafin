@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
 
@@ -22,6 +23,7 @@ import { MainComponent } from './main.component';
     LayoutModule,
     MatSidenavModule,
     MatListModule,
+    OverlayModule,
   ]
 })
 export class MainModule { }

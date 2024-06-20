@@ -7,6 +7,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { AuthModule } from './auth/auth.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { EvolucaoModule } from './evolucao/evolucao.module';
+import { NotificacaoModule } from './notificacao/notificacao.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EvolucaoModule } from './evolucao/evolucao.module';
     AuthModule,
     ClienteModule,
     EvolucaoModule,
+    NotificacaoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

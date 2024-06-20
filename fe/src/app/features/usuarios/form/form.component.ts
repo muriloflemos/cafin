@@ -29,7 +29,7 @@ export class FormUsuarioComponent {
     { label: 'Cliente', role: Role.CLIENTE },
     { label: 'Avaliação/Reavaliação', role: Role.AVALIACAO },
     { label: 'Evoluções', role: Role.EVOLUCAO },
-    { label: 'Notificações', role: Role.NOTIFICACAO },
+    // { label: 'Notificações', role: Role.NOTIFICACAO },
   ];
 
   constructor(
