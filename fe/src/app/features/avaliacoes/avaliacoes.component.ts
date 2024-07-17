@@ -3,20 +3,20 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable, Subject, filter, switchMap, takeUntil, tap } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { EvolucaoService } from '../../services/evolucao.service';
+import { startOfDay } from 'date-fns';
+import { AvaliacaoService } from '../../services/avaliacao.service';
 import { AlertService } from '../../services/alert/alert.service';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { Evolucao, FindEvolucaoDto } from '../../interfaces/evolucao';
 import { PaginatedDTO } from '../../interfaces/paginated.dto';
-import { startOfDay } from 'date-fns';
+import { Avaliacao, FindAvaliacaoDto } from '../../interfaces/avaliacao';
 
 @Component({
-  selector: 'app-evolucoes',
-  templateUrl: './evolucoes.component.html',
-  styleUrls: ['./evolucoes.component.css']
+  selector: 'app-avaliacoes',
+  templateUrl: './avaliacoes.component.html',
+  styleUrls: ['./avaliacoes.component.css']
 })
-export class EvolucoesComponent implements OnInit, OnDestroy {
-  private readonly filterKey = 'EvolucoesComponent.filter';
+export class AvaliacoesComponent {
+  private readonly filterKey = 'AvaliacoesComponent.filter';
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.loadingSubject.asObservable();
@@ -27,21 +27,22 @@ export class EvolucoesComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'data',
     'cliente',
+    'pontuacao',
     'actions',
   ];
 
   pageIndex = 0;
   pageSize = 10;
 
-  private dataParams = new BehaviorSubject<FindEvolucaoDto | null>(null);
-  dataSource$: Observable<PaginatedDTO<Evolucao>> = this.dataParams.asObservable()
+  private dataParams = new BehaviorSubject<FindAvaliacaoDto | null>(null);
+  dataSource$: Observable<PaginatedDTO<Avaliacao>> = this.dataParams.asObservable()
     .pipe(
       takeUntil(this.onDestroy$),
       filter((params) => params !== null),
       switchMap((params) => {
         if (params !== null) {
           this.loadingSubject.next(true);
-          return this.evolucaoService.findAll(params);
+          return this.avaliacaoService.findAll(params);
         }
         return [];
       }),
@@ -60,16 +61,11 @@ export class EvolucoesComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private readonly evolucaoService: EvolucaoService,
+    private readonly avaliacaoService: AvaliacaoService,
     private readonly localStorageService: LocalStorageService,
     private readonly router: Router,
     private readonly alertService: AlertService,
-  ) {
-    this.form.controls.startDate.valueChanges
-      .subscribe((value) => {
-        console.log(value);
-      });
-  }
+  ) { }
 
   ngOnInit(): void {
     this.loadFilter();
@@ -107,7 +103,7 @@ export class EvolucoesComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    const params: FindEvolucaoDto = {};
+    const params: FindAvaliacaoDto = {};
     const { startDate, endDate, cliente } = this.form.value;
 
     if (startDate && endDate) {
@@ -122,27 +118,27 @@ export class EvolucoesComponent implements OnInit, OnDestroy {
   }
 
   add(): void {
-    this.router.navigate(['evolucoes', 'form']);
+    this.router.navigate(['avaliacoes', 'form']);
   }
 
-  editar(evolucao: Evolucao): void {
-    this.router.navigate(['evolucoes', 'form', evolucao.id]);
+  visualizar(avalicao: Avaliacao): void {
+    this.router.navigate(['avaliacoes', 'form', avalicao.id]);
   }
 
-  excluir(evolucao: Evolucao): void {
-    const title = 'Excluir evolução';
-    const message = `Deseja realmente excluir a evolução?`;
+  excluir(avalicao: Avaliacao): void {
+    const title = 'Excluir avaliação';
+    const message = `Deseja realmente excluir a avaliação?`;
     this.alertService.showYesNo(title, message)
     .then((result: boolean) => {
       if (result) {
-        this.evolucaoService.remove(evolucao.id)
+        this.avaliacaoService.remove(avalicao.id)
           .pipe(takeUntil(this.onDestroy$))
           .subscribe({
             complete: () => {
               this.load();
             },
             error: (err) => {
-              const message = 'Não foi possível excluir a evolução!';
+              const message = 'Não foi possível excluir a avaliação!';
               this.alertService.showError(title, message);
             },
           });

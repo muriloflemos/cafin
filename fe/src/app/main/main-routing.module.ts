@@ -5,6 +5,7 @@ import { authGuard } from '../auth.guard';
 import { adminGuard } from '../guards/admin.guard';
 import { clienteGuard } from '../guards/cliente.guard';
 import { evolucaoGuard } from '../guards/evolucao.guard';
+import { avaliacaoGuard } from '../guards/avaliacao.guard';
 
 const routes: Routes = [
   {
@@ -34,6 +35,12 @@ const routes: Routes = [
         canActivate: [evolucaoGuard],
         loadChildren: () =>
           import('../features/evolucoes/evolucoes.module').then((m) => m.EvolucoesModule),
+      },
+      {
+        path: 'avaliacoes',
+        canActivate: [avaliacaoGuard],
+        loadChildren: () =>
+          import('../features/avaliacoes/avaliacoes.module').then((m) => m.AvaliacoesModule),
       },
     ],
   },

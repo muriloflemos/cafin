@@ -1,0 +1,82 @@
+<app-page-header title="Avaliações/Reavaliações">
+  <ng-container *ngIf="!view; else viewActions" slot="actions">
+    <app-button title="Cancelar" icon="close" color="secondary" (click)="cancelar()"></app-button>
+    <app-button title="Salvar" icon="done" (click)="salvar()" [disabled]="!form.valid"></app-button>
+  </ng-container>
+  <ng-template #viewActions slot="actions">
+    <app-button title="Voltar" icon="arrow_back" color="secondary" (click)="cancelar()"></app-button>
+  </ng-template>
+</app-page-header>
+
+<form [formGroup]="form">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Informações</mat-card-subtitle>
+    </mat-card-header>
+
+    <br />
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="form-field-right-spacing">
+        <mat-label>Data</mat-label>
+        <input matInput formControlName="data" [readonly]="view" [mask]="dateMask" [dropSpecialCharacters]="false">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Pontuação</mat-label>
+        <input matInput readonly formControlName="totalPontos">
+      </mat-form-field>
+
+      <br />
+
+      <mat-form-field appearance="outline" class="form-field-full">
+        <mat-label>Cliente</mat-label>
+        <input
+          type="text"
+          placeholder="Selecione o cliente"
+          aria-label="Number"
+          matInput
+          formControlName="cliente"
+          [matAutocomplete]="auto"
+          [readonly]="view"
+        >
+        <mat-autocomplete
+          autoActiveFirstOption
+          #auto="matAutocomplete"
+          [displayWith]="displayCliente"
+          (optionSelected)="clienteSelected($event)"
+        >
+          <mat-option *ngFor="let option of clientes$ | async" [value]="option">
+            {{ option.nome }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <br />
+
+  <ng-container *ngIf="escalas$ | async as escalas" formArrayName="items">
+    <mat-card>
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab class="avaliacoes-form__tab" *ngFor="let escala of escalas" [label]="escala.descricao">
+            <div *ngFor="let grupo of escala.grupos; let i=index" class="escalas-container">
+              <div class="escalas-header">
+                <h3 class="escala-grupo-title">{{ grupo.descricao }}: {{ getPontos(grupo.index) }}</h3>
+              </div>
+              <mat-radio-group class="escala-grupo" [formControlName]="grupo.index">
+                <mat-radio-button
+                  *ngFor="let item of grupo.items"
+                  [disabled]="view"
+                  [value]="item.id"
+                  (change)="onChangeItem(item, grupo)"
+                >{{ item.descricao }} ({{ item.pontos }})</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</form>

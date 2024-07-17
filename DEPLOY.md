@@ -1,5 +1,11 @@
 # Deploying the APP
 
+Build the frontend code
+
+```bash
+cd fe && npm run build:prod && cd ../
+```
+
 Run the following command locally to build the image:
 
 ```bash
@@ -10,7 +16,7 @@ docker build -t cafin:$TAG . --platform=linux/amd64
 Next, test running the container locally
 
 ```bash
-docker run -p 80:3000 --env DATABASE_URL=$DATABASE_URL cafin:$TAG
+docker run -p 80:3000 --env DATABASE_URL=$DATABASE_URL cafin:$TAGdocker run -p 80:3000 --env DATABASE_URL=$DATABASE_URL cafin:$TAG
 ```
 
 Next, run the following command to save the image in a `.tar` file:

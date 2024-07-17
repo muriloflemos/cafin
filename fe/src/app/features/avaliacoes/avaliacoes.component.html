@@ -1,0 +1,106 @@
+<app-page-header title="Avaliações/Reavaliações"></app-page-header>
+
+<mat-card class="section">
+  <form [formGroup]="form" class="filtro">
+    <mat-form-field appearance="outline">
+      <mat-label>Periodo</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="startDate" placeholder="Data inicial">
+        <input matEndDate formControlName="endDate" placeholder="Data final">
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <input matInput type="text" formControlName="cliente">
+    </mat-form-field>
+
+    <div class="filtro__actions">
+      <button
+        type="reset"
+        mat-raised-button
+        (click)="limpar()"
+      >Limpar</button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!form.valid"
+        (click)="filtrar()"
+      >Filtrar</button>
+    </div>
+  </form>
+</mat-card>
+
+<mat-card class="section table-wrapper">
+  <ng-container *ngIf="dataSource$ | async as dataSource">
+    <table
+      mat-table
+      *ngIf="!(isLoading$ | async)"
+      [dataSource]="dataSource.data"
+      class="data-table"
+    >
+      <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Data</th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.data | date:'shortDate' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Cliente</th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.cliente.nome }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="pontuacao">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell" mat-sort-header>Pontuação</th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">{{ item.pontuacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="data-table__cell small"></th>
+        <td mat-cell *matCellDef="let item" class="data-table__cell">
+          <div class="data-table__cell__actions">
+            <button mat-icon-button (click)="visualizar(item)">
+              <mat-icon>find_in_page</mat-icon>
+            </button>
+            <button mat-icon-button (click)="excluir(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell empty" colspan="4">Nenhum registro encontrado</td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [class.hidden]="isLoading$ | async"
+      [length]="dataSource.count"
+      [pageIndex]="pageIndex"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 20]"
+      showFirstLastButtons="true"
+      (page)="handlePageEvent($event)"
+    ></mat-paginator>
+  </ng-container>
+
+  <div class="loading" *ngIf="isLoading$ | async">
+    <mat-spinner diameter="25"></mat-spinner>
+    <span>Buscando dados...</span>
+  </div>
+</mat-card>
+
+<button
+  mat-fab
+  color="primary"
+  class="floating-button"
+  (click)="add()"
+>
+  <mat-icon>add</mat-icon>
+</button>

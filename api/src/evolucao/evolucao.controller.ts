@@ -16,7 +16,10 @@ import { FindEvolucaoDto } from './dto/find-evolucao.dto';
 import { GetUser } from '../usuario/usuario.decorator';
 import { Usuario } from '../usuario/entities/usuario.entity';
 import { PaginatedDTO } from '../classes/paginated.dto';
+import { Roles } from '../auth/roles.decorator';
+import { Role } from '../enums/role.enum';
 
+@Roles(Role.ADMIN, Role.EVOLUCAO)
 @Controller('evolucao')
 export class EvolucaoController {
   constructor(private readonly evolucaoService: EvolucaoService) {}

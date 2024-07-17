@@ -1,0 +1,47 @@
+:host .form-field-full {
+  width: 100%;
+}
+
+:host .form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+:host .form-row-spacer {
+  width: 2rem;
+}
+
+@media only screen and (max-width: 600px) {
+  :host .form-row {
+    display: block;
+  }
+}
+
+.form-field-right-spacing {
+  margin-inline-end: 1rem;
+}
+
+.escalas-container {
+  padding-block-start: 1rem;
+}
+
+.escalas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.escala-grupo-title {
+  margin: 0;
+  color: var(--mat-card-subtitle-text-color);
+}
+
+.escala-grupo {
+  display: flex;
+  flex-direction: column;
+}
+
+.avaliacoes-form__tab > .mat-mdc-tab-body-content {
+  overflow: unset;
+}

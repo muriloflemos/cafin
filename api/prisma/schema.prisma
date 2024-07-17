@@ -22,6 +22,7 @@ model Usuario {
   roles        UsuarioRoles[]
   evolucoes    Evolucao[]
   notificacoes Notificacao[]
+  avaliacoes   Avaliacao[]
 
   @@map("usuario")
 }
@@ -36,49 +37,107 @@ model UsuarioRoles {
 }
 
 model Cliente {
-  id                          Int        @id @default(autoincrement())
-  nome                        String     @db.VarChar(200)
-  telefone                    String?    @db.VarChar(30)
-  endereco                    String?    @db.VarChar(200)
-  estadoCivil                 String?    @db.VarChar(50)
+  id                          Int         @id @default(autoincrement())
+  nome                        String      @db.VarChar(200)
+  telefone                    String?     @db.VarChar(30)
+  endereco                    String?     @db.VarChar(200)
+  estadoCivil                 String?     @db.VarChar(50)
   filhos                      Int?
-  email                       String?    @db.VarChar(200)
-  dataNascimento              DateTime?  @db.Date()
-  cpf                         String?    @db.VarChar(20)
-  rg                          String?    @db.VarChar(200)
-  diagnosticoClinico          String?    @db.LongText
-  diagnosticoFisioterapeutico String?    @db.LongText
+  email                       String?     @db.VarChar(200)
+  dataNascimento              DateTime?   @db.Date()
+  cpf                         String?     @db.VarChar(20)
+  rg                          String?     @db.VarChar(200)
+  diagnosticoClinico          String?     @db.LongText
+  diagnosticoFisioterapeutico String?     @db.LongText
   contadorEvolucoes           Int?
-  createdAt                   DateTime   @default(now())
-  updatedAt                   DateTime   @default(now()) @updatedAt
+  createdAt                   DateTime    @default(now())
+  updatedAt                   DateTime    @default(now()) @updatedAt
   Evolucao                    Evolucao[]
+  Avaliacao                   Avaliacao[]
 
   @@map("cliente")
 }
 
 model Evolucao {
-  id        Int       @id @default(autoincrement())
-  data      DateTime  @db.DateTime()
-  descricao String?   @db.LongText
+  id        Int      @id @default(autoincrement())
+  data      DateTime @db.DateTime()
+  descricao String?  @db.LongText
   clienteId Int
   usuarioId Int
-  cliente   Cliente   @relation(fields: [clienteId], references: [id])
-  usuario   Usuario   @relation(fields: [usuarioId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+  cliente   Cliente  @relation(fields: [clienteId], references: [id])
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("evolucao")
 }
 
 model Notificacao {
-  id        Int       @id @default(autoincrement()) 
-  tipo      String    @db.VarChar(100)
+  id        Int      @id @default(autoincrement())
+  tipo      String   @db.VarChar(100)
   visto     Boolean
-  descricao String?   @db.VarChar(200)
+  descricao String?  @db.VarChar(200)
   conteudo  Json?
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
   usuarioId Int?
-  usuario   Usuario?  @relation(fields: [usuarioId], references: [id])
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
 
   @@map("notificacao")
+}
+
+model Escala {
+  id        Int           @id @default(autoincrement())
+  descricao String        @db.VarChar(200)
+  grupos    EscalaGrupo[]
+
+  @@map("escala")
+}
+
+model EscalaGrupo {
+  id             Int             @id @default(autoincrement())
+  descricao      String          @db.VarChar(200)
+  instrucao      String?         @db.VarChar(500)
+  escalaId       Int
+  escala         Escala          @relation(fields: [escalaId], references: [id])
+  items          EscalaItem[]
+  itemsAvaliacao AvaliacaoItem[]
+
+  @@map("escala_grupo")
+}
+
+model EscalaItem {
+  id             Int             @id @default(autoincrement())
+  descricao      String          @db.VarChar(200)
+  pontos         Decimal         @db.Decimal(15, 2)
+  grupoId        Int
+  grupo          EscalaGrupo?    @relation(fields: [grupoId], references: [id])
+  itemsAvaliacao AvaliacaoItem[]
+
+  @@map("escala_item")
+}
+
+model Avaliacao {
+  id        Int             @id @default(autoincrement())
+  data      DateTime        @db.DateTime()
+  clienteId Int
+  usuarioId Int
+  cliente   Cliente         @relation(fields: [clienteId], references: [id])
+  usuario   Usuario         @relation(fields: [usuarioId], references: [id])
+  pontuacao Decimal         @db.Decimal(15, 2)
+  items     AvaliacaoItem[]
+
+  @@map("avaliacao")
+}
+
+model AvaliacaoItem {
+  id          Int         @id @default(autoincrement())
+  avaliacaoId Int
+  grupoId     Int
+  itemId      Int
+  pontuacao   Decimal     @db.Decimal(15, 2)
+  avaliacao   Avaliacao   @relation(fields: [avaliacaoId], references: [id])
+  grupo       EscalaGrupo @relation(fields: [grupoId], references: [id])
+  item        EscalaItem  @relation(fields: [itemId], references: [id])
+
+  @@map("avaliacao_item")
 }

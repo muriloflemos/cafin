@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { EvolucaoModule } from './evolucao/evolucao.module';
 import { NotificacaoModule } from './notificacao/notificacao.module';
+import { AvaliacaoModule } from './avaliacao/avaliacao.module';
+import { EscalaModule } from './escala/escala.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { NotificacaoModule } from './notificacao/notificacao.module';
     ClienteModule,
     EvolucaoModule,
     NotificacaoModule,
+    AvaliacaoModule,
+    EscalaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
