@@ -4,8 +4,8 @@ COPY ./api/ .
 RUN npm ci --unsafe-perm
 
 FROM install as build
-RUN npm run build
 RUN npx prisma generate
+RUN npm run build
 
 # FROM node:alpine as fe-install
 # WORKDIR /usr/src/app
