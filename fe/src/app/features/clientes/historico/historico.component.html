@@ -1,4 +1,8 @@
-<app-page-header title="Histórico de Avaliações"></app-page-header>
+<app-page-header title="Histórico de Avaliações">
+  <ng-container slot="actions">
+    <app-button title="Voltar" icon="arrow_back" color="secondary" (click)="voltar()"></app-button>
+  </ng-container>
+</app-page-header>
 
 <ng-container *ngIf="charts$ | async as charts">
   <mat-card class="section" *ngFor="let chart of charts">

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClienteService } from '../../../services/cliente.service';
 import * as Highcharts from 'highcharts';
 import { BehaviorSubject, map, Observable, Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Historico } from '../../../interfaces/cliente';
 import { formatDate, stringToDate } from '../../../utils/date';
 
@@ -92,7 +92,8 @@ export class HistoricoComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();
 
   constructor(
-    private route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly clienteService: ClienteService,
   ) {}
 
@@ -114,5 +115,9 @@ export class HistoricoComponent implements OnInit, OnDestroy {
       .subscribe((data: Historico[]) => {
         this.chartSub.next(data);
       });
+  }
+
+  voltar(): void {
+    this.router.navigate(['clientes']);
   }
 }
