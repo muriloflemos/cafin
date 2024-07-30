@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { parse, format } from 'date-fns';
+import { parse } from 'date-fns';
 import { PasswordValidation } from '../../../helpers/password.validator';
 import { ClienteService } from '../../../services/cliente.service';
 import { AlertService } from '../../../services/alert/alert.service';

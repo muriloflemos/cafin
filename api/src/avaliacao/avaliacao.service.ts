@@ -13,15 +13,10 @@ export class AvaliacaoService {
 
   async create(data: CreateAvaliacaoDto, usuario: Usuario): Promise<Avaliacao> {
     try {
-      const pontuacao = data.items.reduce(
-        (acc, { pontuacao }) => (acc += pontuacao),
-        0,
-      );
       return await this.db.avaliacao.create({
         data: {
           data: data.data,
           clienteId: data.clienteId,
-          pontuacao,
           usuarioId: usuario.id,
           items: {
             createMany: {
@@ -107,5 +102,19 @@ export class AvaliacaoService {
     } catch (error) {
       this.logger.error(error);
     }
+  }
+
+  historico(clienteId: number) {
+    return this.db.avaliacao.findMany({
+      where: {
+        clienteId,
+      },
+      orderBy: {
+        data: 'asc',
+      },
+      include: {
+        items: true,
+      },
+    });
   }
 }

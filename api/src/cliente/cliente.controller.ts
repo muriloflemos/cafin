@@ -7,20 +7,30 @@ import {
   Param,
   Delete,
   Query,
+  Logger,
 } from '@nestjs/common';
 import { Cliente } from '@prisma/client';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/enums/role.enum';
 import { ClienteService } from './cliente.service';
+import { AvaliacaoService } from '../avaliacao/avaliacao.service';
+import { EscalaService } from '../escala/escala.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { FindClienteDto } from './dto/find-cliente.dto';
 import { PaginatedDTO } from '../classes/paginated.dto';
+import { Historico } from './entities/historico.entity';
 
 @Roles(Role.ADMIN, Role.CLIENTE)
 @Controller('cliente')
 export class ClienteController {
-  constructor(private readonly clienteService: ClienteService) {}
+  private readonly logger = new Logger(ClienteController.name);
+
+  constructor(
+    private readonly clienteService: ClienteService,
+    private readonly avaliacaoService: AvaliacaoService,
+    private readonly escalaService: EscalaService,
+  ) {}
 
   @Post()
   create(@Body() createClienteDto: CreateClienteDto) {
@@ -53,5 +63,30 @@ export class ClienteController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.clienteService.remove(Number(id));
+  }
+
+  @Get('historico/:id')
+  async historico(@Param('id') id: string): Promise<Historico[]> {
+    const escalas = await this.escalaService.findAll();
+    const avaliacoes = await this.avaliacaoService.historico(Number(id));
+    return escalas.map((escala) => {
+      const grupoIds = escala.grupos.map((grupo) => grupo.id);
+      const pontos = avaliacoes.map((avaliacao) => {
+        const pontos = avaliacao.items.reduce((acc, item) => {
+          if (grupoIds.includes(item.grupoId)) {
+            acc = acc + Number(item.pontuacao);
+          }
+          return acc;
+        }, 0);
+        return {
+          data: avaliacao.data,
+          pontos,
+        };
+      });
+      return {
+        nome: escala.descricao,
+        pontos,
+      };
+    });
   }
 }

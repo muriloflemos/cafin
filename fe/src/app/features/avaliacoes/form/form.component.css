@@ -45,3 +45,7 @@
 .avaliacoes-form__tab > .mat-mdc-tab-body-content {
   overflow: unset;
 }
+
+.escala-total-pontos {
+  color: var(--mat-card-subtitle-text-color);
+}

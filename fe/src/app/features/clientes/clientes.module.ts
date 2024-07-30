@@ -16,7 +16,9 @@ import { PageHeaderModule } from '../../components/page-header/page-header.modul
 import { ButtonModule } from '../../components/button/button.module';
 import { PaginatorService } from '../../services/paginator.service';
 import { FormClienteComponent } from './form/form.component';
+import { HistoricoComponent } from './historico/historico.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 const routes: Routes = [
   {
@@ -30,13 +32,18 @@ const routes: Routes = [
   {
     path: 'form/:id',
     component: FormClienteComponent,
-  }
+  },
+  {
+    path: 'historico/:id',
+    component: HistoricoComponent,
+  },
 ];
 
 @NgModule({
   declarations: [
     ClientesComponent,
     FormClienteComponent,
+    HistoricoComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +62,7 @@ const routes: Routes = [
     MatListModule,
     PageHeaderModule,
     ButtonModule,
+    HighchartsChartModule,
   ],
   providers: [provideNgxMask(), {provide: MatPaginatorIntl, useClass: PaginatorService}],
 })

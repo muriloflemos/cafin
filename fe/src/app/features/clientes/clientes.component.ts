@@ -120,6 +120,10 @@ export class ClientesComponent implements OnInit, OnDestroy {
     this.router.navigate(['clientes', 'form', cliente.id]);
   }
 
+  historico(cliente: Cliente): void {
+    this.router.navigate(['clientes', 'historico', cliente.id]);
+  }
+
   excluir(cliente: Cliente): void {
     const title = 'Excluir usuário';
     const message = `Deseja realmente excluir o cliente ${cliente.nome}?`;

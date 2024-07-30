@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Cliente, SaveClienteDTO, FindClienteDto } from '../interfaces/cliente';
+import { Cliente, SaveClienteDTO, FindClienteDto, Historico } from '../interfaces/cliente';
 import { PaginatedDTO } from '../interfaces/paginated.dto';
 
 @Injectable({
@@ -30,5 +30,9 @@ export class ClienteService {
 
   remove(id: number): Observable<Cliente> {
     return this.apiService.delete<Cliente>(`${this.path}/${id}`);
+  }
+
+  historico(id: number): Observable<Historico[]> {
+    return this.apiService.get<Historico[]>(`${this.path}/historico/${id}`);
   }
 }

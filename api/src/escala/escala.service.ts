@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DBService } from '../db.service';
-import { Escala } from '@prisma/client';
 
 @Injectable()
 export class EscalaService {
@@ -8,7 +7,7 @@ export class EscalaService {
 
   constructor(private readonly db: DBService) {}
 
-  async findAll(): Promise<Escala[]> {
+  async findAll() {
     return await this.db.escala.findMany({
       include: {
         grupos: {

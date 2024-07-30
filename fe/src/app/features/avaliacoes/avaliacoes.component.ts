@@ -27,7 +27,6 @@ export class AvaliacoesComponent {
   displayedColumns: string[] = [
     'data',
     'cliente',
-    'pontuacao',
     'actions',
   ];
 

@@ -22,11 +22,6 @@
         <input matInput formControlName="data" [readonly]="view" [mask]="dateMask" [dropSpecialCharacters]="false">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Pontuação</mat-label>
-        <input matInput readonly formControlName="totalPontos">
-      </mat-form-field>
-
       <br />
 
       <mat-form-field appearance="outline" class="form-field-full">
@@ -60,7 +55,7 @@
     <mat-card>
       <mat-card-content>
         <mat-tab-group>
-          <mat-tab class="avaliacoes-form__tab" *ngFor="let escala of escalas" [label]="escala.descricao">
+          <mat-tab class="avaliacoes-form__tab" *ngFor="let escala of escalas; let i = index" [label]="escala.descricao">
             <div *ngFor="let grupo of escala.grupos; let i=index" class="escalas-container">
               <div class="escalas-header">
                 <h3 class="escala-grupo-title">{{ grupo.descricao }}: {{ getPontos(grupo.index) }}</h3>
@@ -74,6 +69,8 @@
                 >{{ item.descricao }} ({{ item.pontos }})</mat-radio-button>
               </mat-radio-group>
             </div>
+            <br /><hr />
+            <h3 class="escala-total-pontos">Total pontuação: {{ escalaPontos[i] }}</h3>
           </mat-tab>
         </mat-tab-group>
       </mat-card-content>

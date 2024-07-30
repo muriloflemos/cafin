@@ -13,7 +13,6 @@ export interface Avaliacao {
   data: Date;
   clienteId: number;
   cliente: Cliente;
-  pontuacao: number;
   items: AvaliacaoItem[];
 }
 

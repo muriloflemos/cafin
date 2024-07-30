@@ -123,7 +123,6 @@ model Avaliacao {
   usuarioId Int
   cliente   Cliente         @relation(fields: [clienteId], references: [id])
   usuario   Usuario         @relation(fields: [usuarioId], references: [id])
-  pontuacao Decimal         @db.Decimal(15, 2)
   items     AvaliacaoItem[]
 
   @@map("avaliacao")

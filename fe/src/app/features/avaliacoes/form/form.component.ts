@@ -35,7 +35,6 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
     cliente: new FormControl<string | Cliente>('', Validators.required),
     items: this.formBuilder.array([]),
     pontos: this.formBuilder.array([]),
-    totalPontos: [0],
   });
 
   view = false;
@@ -46,6 +45,8 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
   clientes$: Observable<Cliente[]>;
 
   escalas: Escala[] = [];
+  escalaPontos: number[] = [];
+
   private escalasSub = new BehaviorSubject<Escala[]>([]);
   escalas$: Observable<Escala[]> = this.escalasSub.asObservable()
     .pipe(
@@ -96,7 +97,6 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadEscalas();
     this.route.params.subscribe((params) => {
       this.avaliacaoId = Number(params['id']);
 
@@ -106,24 +106,24 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
           .findById(this.avaliacaoId)
           .subscribe((avaliacao: Avaliacao) => {
             if (avaliacao) {
-              const { data, cliente, pontuacao } = avaliacao;
+              const { data, cliente } = avaliacao;
               this.form.patchValue({
                 data: data ? formatDate(data) : null,
                 clienteId: cliente.id,
                 cliente,
-                totalPontos: Number(pontuacao),
               });
               this.loadEscalas().subscribe((escalas: Escala[]) => {
                 for (const escala of escalas) {
                   for (const grupo of escala.grupos) {
                     const item = avaliacao.items
-                      .find((item: AvaliacaoItem) => item.grupoId === grupo.id);
+                    .find((item: AvaliacaoItem) => item.grupoId === grupo.id);
                     if (item) {
                       this.addFormItem(this.formBuilder.control(item.itemId, Validators.required));
                       this.addFormPontos(this.formBuilder.control(Number(item.pontuacao), Validators.required));
                     }
                   }
                 }
+                this.calculaPontuacao();
               });
             }
           });
@@ -254,12 +254,12 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
   }
 
   calculaPontuacao() {
-    let pontuacao = 0;
-    for (let value of this.formPontos.value) {
-      pontuacao += Number(value);
+    for (let i = 0; i < this.escalas.length; i++) {
+      this.escalaPontos[i] = 0;
+      for (const grupo of this.escalas[i].grupos) {
+        const pontos = this.formPontos.at(grupo.index).value;
+        this.escalaPontos[i] += Number(pontos);
+      }
     }
-    this.form.patchValue({
-      totalPontos: pontuacao,
-    });
   }
 }
