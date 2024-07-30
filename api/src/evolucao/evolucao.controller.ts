@@ -13,8 +13,7 @@ import { EvolucaoService } from './evolucao.service';
 import { CreateEvolucaoDto } from './dto/create-evolucao.dto';
 import { UpdateEvolucaoDto } from './dto/update-evolucao.dto';
 import { FindEvolucaoDto } from './dto/find-evolucao.dto';
-import { GetUser } from '../usuario/usuario.decorator';
-import { Usuario } from '../usuario/entities/usuario.entity';
+import { GetUser, UsuarioWithRoles } from '../usuario/usuario.decorator';
 import { PaginatedDTO } from '../classes/paginated.dto';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../enums/role.enum';
@@ -27,7 +26,7 @@ export class EvolucaoController {
   @Post()
   create(
     @Body() createEvolucaoDto: CreateEvolucaoDto,
-    @GetUser() usuario: Usuario,
+    @GetUser() usuario: UsuarioWithRoles,
   ) {
     return this.evolucaoService.create(createEvolucaoDto, usuario);
   }
@@ -35,12 +34,14 @@ export class EvolucaoController {
   @Get()
   async findAll(
     @Query() params: FindEvolucaoDto,
+    @GetUser() usuario: UsuarioWithRoles,
   ): Promise<PaginatedDTO<Evolucao>> {
-    const count = await this.evolucaoService.count(params);
+    const count = await this.evolucaoService.count(params, usuario);
     const data = await this.evolucaoService.findAll(
       params,
       params.skip,
       params.take,
+      usuario,
     );
     return new PaginatedDTO<Evolucao>(count, data as Evolucao[]);
   }

@@ -15,7 +15,6 @@ export class MainComponent implements OnInit, OnDestroy {
   hasClienteRole = false;
   hasAvaliacaoRole = false;
   hasEvolucoesRole = false;
-  hasNotificacoesRole = false;
 
   private onDestroy$ = new Subject();
 
@@ -28,6 +27,8 @@ export class MainComponent implements OnInit, OnDestroy {
   ) {
     this.isAdmin = this.authService.isAdmin();
     this.hasClienteRole = this.authService.hasRole(Role.CLIENTE);
+    this.hasAvaliacaoRole = this.authService.hasRole(Role.AVALIACAO);
+    this.hasEvolucoesRole = this.authService.hasRole(Role.EVOLUCAO);
   }
 
   async ngOnInit() {

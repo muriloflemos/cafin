@@ -1,9 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DBService } from '../db.service';
 import { Avaliacao } from '@prisma/client';
-import { Usuario } from '../usuario/entities/usuario.entity';
 import { CreateAvaliacaoDto } from './dto/create-avaliacao.dto';
 import { FindAvaliacaoDto } from './dto/find-avaliacao.dto';
+import { Role } from '../enums/role.enum';
+import { UsuarioWithRoles } from '../usuario/usuario.decorator';
 
 @Injectable()
 export class AvaliacaoService {
@@ -11,7 +12,10 @@ export class AvaliacaoService {
 
   constructor(private readonly db: DBService) {}
 
-  async create(data: CreateAvaliacaoDto, usuario: Usuario): Promise<Avaliacao> {
+  async create(
+    data: CreateAvaliacaoDto,
+    usuario: UsuarioWithRoles,
+  ): Promise<Avaliacao> {
     try {
       return await this.db.avaliacao.create({
         data: {
@@ -37,8 +41,13 @@ export class AvaliacaoService {
     }
   }
 
-  private buildWhere(params: FindAvaliacaoDto) {
+  private buildWhere(params: FindAvaliacaoDto, usuario: UsuarioWithRoles) {
     const where = {};
+
+    const roles = usuario.roles.map((role) => role.role);
+    if (!roles.includes(Role.ADMIN)) {
+      where['usuarioId'] = usuario.id;
+    }
 
     if (params.cliente) {
       where['cliente'] = {
@@ -58,15 +67,20 @@ export class AvaliacaoService {
     return where;
   }
 
-  count(params: FindAvaliacaoDto): Promise<number> {
+  count(params: FindAvaliacaoDto, usuario: UsuarioWithRoles): Promise<number> {
     return this.db.avaliacao.count({
-      where: this.buildWhere(params),
+      where: this.buildWhere(params, usuario),
     });
   }
 
-  findAll(params: FindAvaliacaoDto, skip: number, take: number) {
+  findAll(
+    params: FindAvaliacaoDto,
+    skip: number,
+    take: number,
+    usuario: UsuarioWithRoles,
+  ) {
     return this.db.avaliacao.findMany({
-      where: this.buildWhere(params),
+      where: this.buildWhere(params, usuario),
       take: take !== null ? take : undefined,
       skip: skip !== null ? skip : undefined,
       orderBy: {
@@ -104,11 +118,18 @@ export class AvaliacaoService {
     }
   }
 
-  historico(clienteId: number) {
+  historico(clienteId: number, usuario: UsuarioWithRoles) {
+    const where = {
+      clienteId,
+    };
+
+    const roles = usuario.roles.map((role) => role.role);
+    if (!roles.includes(Role.ADMIN)) {
+      where['usuarioId'] = usuario.id;
+    }
+
     return this.db.avaliacao.findMany({
-      where: {
-        clienteId,
-      },
+      where,
       orderBy: {
         data: 'asc',
       },

@@ -20,6 +20,7 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { FindClienteDto } from './dto/find-cliente.dto';
 import { PaginatedDTO } from '../classes/paginated.dto';
 import { Historico } from './entities/historico.entity';
+import { GetUser, UsuarioWithRoles } from '../usuario/usuario.decorator';
 
 @Roles(Role.ADMIN, Role.CLIENTE)
 @Controller('cliente')
@@ -66,9 +67,15 @@ export class ClienteController {
   }
 
   @Get('historico/:id')
-  async historico(@Param('id') id: string): Promise<Historico[]> {
+  async historico(
+    @Param('id') id: string,
+    @GetUser() usuario: UsuarioWithRoles,
+  ): Promise<Historico[]> {
     const escalas = await this.escalaService.findAll();
-    const avaliacoes = await this.avaliacaoService.historico(Number(id));
+    const avaliacoes = await this.avaliacaoService.historico(
+      Number(id),
+      usuario,
+    );
     return escalas.map((escala) => {
       const grupoIds = escala.grupos.map((grupo) => grupo.id);
       const pontos = avaliacoes.map((avaliacao) => {

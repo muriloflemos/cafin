@@ -3,9 +3,10 @@ import { DBService } from '../db.service';
 import { CreateEvolucaoDto } from './dto/create-evolucao.dto';
 import { UpdateEvolucaoDto } from './dto/update-evolucao.dto';
 import { FindEvolucaoDto } from './dto/find-evolucao.dto';
-import { Usuario } from '../usuario/entities/usuario.entity';
+import { UsuarioWithRoles } from '../usuario/usuario.decorator';
 import { NotificacaoService } from '../notificacao/notificacao.service';
 import { ClienteService } from '../cliente/cliente.service';
+import { Role } from '../enums/role.enum';
 
 @Injectable()
 export class EvolucaoService {
@@ -17,7 +18,7 @@ export class EvolucaoService {
     private readonly clienteService: ClienteService,
   ) {}
 
-  async create(data: CreateEvolucaoDto, usuario: Usuario) {
+  async create(data: CreateEvolucaoDto, usuario: UsuarioWithRoles) {
     try {
       const evolucao = await this.db.evolucao.create({
         data: {
@@ -55,8 +56,13 @@ export class EvolucaoService {
     });
   }
 
-  private buildWhere(params: FindEvolucaoDto) {
+  private buildWhere(params: FindEvolucaoDto, usuario: UsuarioWithRoles) {
     const where = {};
+
+    const roles = usuario.roles.map((role) => role.role);
+    if (!roles.includes(Role.ADMIN)) {
+      where['usuarioId'] = usuario.id;
+    }
 
     if (params.cliente) {
       where['cliente'] = {
@@ -76,15 +82,20 @@ export class EvolucaoService {
     return where;
   }
 
-  count(params: FindEvolucaoDto): Promise<number> {
+  count(params: FindEvolucaoDto, usuario: UsuarioWithRoles): Promise<number> {
     return this.db.evolucao.count({
-      where: this.buildWhere(params),
+      where: this.buildWhere(params, usuario),
     });
   }
 
-  findAll(params: FindEvolucaoDto, skip: number, take: number) {
+  findAll(
+    params: FindEvolucaoDto,
+    skip: number,
+    take: number,
+    usuario: UsuarioWithRoles,
+  ) {
     return this.db.evolucao.findMany({
-      where: this.buildWhere(params),
+      where: this.buildWhere(params, usuario),
       take: take !== null ? take : undefined,
       skip: skip !== null ? skip : undefined,
       orderBy: {
