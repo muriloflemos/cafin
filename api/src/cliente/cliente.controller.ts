@@ -38,6 +38,7 @@ export class ClienteController {
     return this.clienteService.create(createClienteDto);
   }
 
+  @Roles(Role.ADMIN, Role.CLIENTE, Role.EVOLUCAO, Role.AVALIACAO)
   @Get()
   async findAll(
     @Query() params: FindClienteDto,
