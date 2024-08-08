@@ -41,6 +41,7 @@ export interface FindClienteDto {
 export interface HistoricoPontos {
   data: Date;
   pontos: number;
+  observacao: string;
 }
 
 export interface Historico {

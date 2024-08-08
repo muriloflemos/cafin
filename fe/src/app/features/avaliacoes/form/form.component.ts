@@ -33,6 +33,7 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
     data: [format(new Date(), 'dd/MM/yyyy'), Validators.required],
     clienteId: [0, Validators.required],
     cliente: new FormControl<string | Cliente>('', Validators.required),
+    observacao: [''],
     items: this.formBuilder.array([]),
     pontos: this.formBuilder.array([]),
   });
@@ -106,11 +107,12 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
           .findById(this.avaliacaoId)
           .subscribe((avaliacao: Avaliacao) => {
             if (avaliacao) {
-              const { data, cliente } = avaliacao;
+              const { data, cliente, observacao } = avaliacao;
               this.form.patchValue({
                 data: data ? formatDate(data) : null,
                 clienteId: cliente.id,
                 cliente,
+                observacao,
               });
               this.loadEscalas().subscribe((escalas: Escala[]) => {
                 for (const escala of escalas) {
@@ -197,7 +199,7 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let { data, clienteId } = this.form.value;
+    let { data, clienteId, observacao } = this.form.value;
 
     try {
       if (data) {
@@ -227,6 +229,7 @@ export class FormAvaliacoesComponent implements OnInit, OnDestroy {
       data,
       clienteId,
       items: itemsDTO,
+      observacao: observacao ?? '',
     };
 
     this.avaliacaoService

@@ -9,7 +9,7 @@ import {
   Query,
   Logger,
 } from '@nestjs/common';
-import { Cliente } from '@prisma/client';
+import { Avaliacao, Cliente } from '@prisma/client';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/enums/role.enum';
 import { ClienteService } from './cliente.service';
@@ -71,13 +71,13 @@ export class ClienteController {
   async historico(
     @Param('id') id: string,
     @GetUser() usuario: UsuarioWithRoles,
-  ): Promise<Historico[]> {
+  ): Promise<{ historico: Historico[]; avaliacoes: Avaliacao[] }> {
     const escalas = await this.escalaService.findAll();
     const avaliacoes = await this.avaliacaoService.historico(
       Number(id),
       usuario,
     );
-    return escalas.map((escala) => {
+    const historico = escalas.map((escala) => {
       const grupoIds = escala.grupos.map((grupo) => grupo.id);
       const pontos = avaliacoes.map((avaliacao) => {
         const pontos = avaliacao.items.reduce((acc, item) => {
@@ -96,5 +96,7 @@ export class ClienteController {
         pontos,
       };
     });
+
+    return { historico, avaliacoes };
   }
 }

@@ -117,13 +117,14 @@ model EscalaItem {
 }
 
 model Avaliacao {
-  id        Int             @id @default(autoincrement())
-  data      DateTime        @db.DateTime()
-  clienteId Int
-  usuarioId Int
-  cliente   Cliente         @relation(fields: [clienteId], references: [id])
-  usuario   Usuario         @relation(fields: [usuarioId], references: [id])
-  items     AvaliacaoItem[]
+  id         Int             @id @default(autoincrement())
+  data       DateTime        @db.DateTime()
+  observacao String?         @db.LongText
+  clienteId  Int
+  usuarioId  Int
+  cliente    Cliente         @relation(fields: [clienteId], references: [id])
+  usuario    Usuario         @relation(fields: [usuarioId], references: [id])
+  items      AvaliacaoItem[]
 
   @@map("avaliacao")
 }

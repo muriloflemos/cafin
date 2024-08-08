@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Cliente, SaveClienteDTO, FindClienteDto, Historico } from '../interfaces/cliente';
 import { PaginatedDTO } from '../interfaces/paginated.dto';
+import { Avaliacao } from '../interfaces/avaliacao';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class ClienteService {
     return this.apiService.delete<Cliente>(`${this.path}/${id}`);
   }
 
-  historico(id: number): Observable<Historico[]> {
-    return this.apiService.get<Historico[]>(`${this.path}/historico/${id}`);
+  historico(id: number): Observable<{ historico: Historico[], avaliacoes: Avaliacao[] }> {
+    return this.apiService.get<{ historico: Historico[], avaliacoes: Avaliacao[] }>(`${this.path}/historico/${id}`);
   }
 }

@@ -3,3 +3,7 @@
   padding-top: 1rem;
   margin-block-end: 1rem;
 }
+
+.table-cell-small {
+  width: 10rem;
+}

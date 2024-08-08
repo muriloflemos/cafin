@@ -22,6 +22,7 @@ export class AvaliacaoService {
           data: data.data,
           clienteId: data.clienteId,
           usuarioId: usuario.id,
+          observacao: data?.observacao ?? null,
           items: {
             createMany: {
               data: data.items.map((value) => ({

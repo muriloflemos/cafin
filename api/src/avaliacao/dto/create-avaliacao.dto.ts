@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsDate, IsInt } from 'class-validator';
+import { IsNotEmpty, IsDate, IsInt, IsOptional } from 'class-validator';
 
 export class CreateAvaliacaoItemDto {
   @IsInt()
@@ -27,4 +27,7 @@ export class CreateAvaliacaoDto {
 
   @IsNotEmpty()
   items: CreateAvaliacaoItemDto[];
+
+  @IsOptional()
+  observacao: string;
 }

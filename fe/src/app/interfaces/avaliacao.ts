@@ -13,6 +13,7 @@ export interface Avaliacao {
   data: Date;
   clienteId: number;
   cliente: Cliente;
+  observacao: string;
   items: AvaliacaoItem[];
 }
 
@@ -25,6 +26,7 @@ export interface CreateAvaliacaoItemDto {
 export interface CreateAvaliacaoDto {
   data: string;
   clienteId: number;
+  observacao: string;
   items: CreateAvaliacaoItemDto[];
 }
 

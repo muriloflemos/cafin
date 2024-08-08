@@ -3,8 +3,9 @@ import { ClienteService } from '../../../services/cliente.service';
 import * as Highcharts from 'highcharts';
 import { BehaviorSubject, map, Observable, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Historico } from '../../../interfaces/cliente';
+import { Historico, HistoricoPontos } from '../../../interfaces/cliente';
 import { formatDate, stringToDate } from '../../../utils/date';
+import { Avaliacao } from 'src/app/interfaces/avaliacao';
 
 @Component({
   selector: 'app-historico',
@@ -81,7 +82,7 @@ export class HistoricoComponent implements OnInit, OnDestroy {
                   name: formatDate(value.data),
                   y: value.pontos,
                 })),
-              }
+              },
             ],
           });
         }
@@ -90,6 +91,12 @@ export class HistoricoComponent implements OnInit, OnDestroy {
     }));
 
   onDestroy$ = new Subject();
+
+  displayedColumns: string[] = [
+    'data',
+    'observacao',
+  ];
+  datasource: Avaliacao[] = [];
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -112,8 +119,9 @@ export class HistoricoComponent implements OnInit, OnDestroy {
   load(clienteId: number): void {
     this.clienteService.historico(clienteId)
       .pipe(takeUntil(this.onDestroy$))
-      .subscribe((data: Historico[]) => {
-        this.chartSub.next(data);
+      .subscribe((data: { historico: Historico[], avaliacoes: Avaliacao[] }) => {
+        this.chartSub.next(data.historico);
+        this.datasource = data.avaliacoes;
       });
   }
 

@@ -46,6 +46,11 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field-full">
+        <mat-label>Observações</mat-label>
+        <textarea matInput formControlName="observacao" rows="10" [readonly]="view"></textarea>
+      </mat-form-field>
     </mat-card-content>
   </mat-card>
 
