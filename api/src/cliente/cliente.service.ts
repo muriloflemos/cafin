@@ -3,6 +3,7 @@ import { DBService } from '../db.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { FindClienteDto } from './dto/find-cliente.dto';
+import { format } from 'date-fns';
 
 @Injectable()
 export class ClienteService {
@@ -11,15 +12,37 @@ export class ClienteService {
   constructor(private readonly db: DBService) {}
 
   async create(data: CreateClienteDto) {
+    let diaNascimento, mesNascimento;
+
+    if (data.dataNascimento) {
+      diaNascimento = Number(format(data.dataNascimento, 'dd'));
+      mesNascimento = Number(format(data.dataNascimento, 'MM'));
+    }
+
     return await this.db.cliente.create({
-      data,
+      data: {
+        ...data,
+        diaNascimento,
+        mesNascimento,
+      },
     });
   }
 
   async update(id: number, data: UpdateClienteDto) {
+    let diaNascimento, mesNascimento;
+
+    if (data.dataNascimento) {
+      diaNascimento = Number(format(data.dataNascimento, 'dd'));
+      mesNascimento = Number(format(data.dataNascimento, 'MM'));
+    }
+
     return await this.db.cliente.update({
       where: { id },
-      data,
+      data: {
+        ...data,
+        diaNascimento,
+        mesNascimento,
+      },
     });
   }
 
@@ -46,11 +69,11 @@ export class ClienteService {
       where['rg'] = params.rg;
     }
 
-    if (params.dataNascimentoStart && params.dataNascimentoEnd) {
-      where['dataNascimento'] = {
-        gte: params.dataNascimentoStart,
-        lte: params.dataNascimentoEnd,
-      };
+    if (params.dataAniversario) {
+      const diaNascimento = Number(format(params.dataAniversario, 'dd'));
+      const mesNascimento = Number(format(params.dataAniversario, 'MM'));
+      where['diaNascimento'] = diaNascimento;
+      where['mesNascimento'] = mesNascimento;
     }
 
     return where;

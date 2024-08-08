@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, Subject, filter, switchMap, takeUntil, tap } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { AlertService } from '../../services/alert/alert.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { Cliente, FindClienteDto } from '../../interfaces/cliente';
 import { PaginatedDTO } from '../../interfaces/paginated.dto';
+import { startOfDay } from 'date-fns';
 
 @Component({
   selector: 'app-clientes',
@@ -56,6 +57,7 @@ export class ClientesComponent implements OnInit, OnDestroy {
       nome: [''],
       username: [''],
       email: ['', Validators.email],
+      dataAniversario: new FormControl<Date | null>(null),
     },
   );
 
@@ -104,9 +106,10 @@ export class ClientesComponent implements OnInit, OnDestroy {
 
   load(): void {
     const params: FindClienteDto = {};
-    const { nome, email } = this.form.value;
+    const { nome, email, dataAniversario } = this.form.value;
     if (!!nome) params.nome = nome;
     if (!!email) params.email = email;
+    if (!!dataAniversario) params.dataAniversario = startOfDay(dataAniversario).toISOString();
     params.take = this.pageSize;
     params.skip = this.pageSize * this.pageIndex;
     this.dataParams.next(params);

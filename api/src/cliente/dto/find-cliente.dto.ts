@@ -21,12 +21,7 @@ export class FindClienteDto {
   @IsDate()
   @IsOptional()
   @Type(() => Date)
-  dataNascimentoStart: Date;
-
-  @IsDate()
-  @IsOptional()
-  @Type(() => Date)
-  dataNascimentoEnd: Date;
+  dataAniversario: Date;
 
   @IsInt()
   @IsOptional()

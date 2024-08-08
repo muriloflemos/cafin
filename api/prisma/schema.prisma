@@ -45,6 +45,8 @@ model Cliente {
   filhos                      Int?
   email                       String?     @db.VarChar(200)
   dataNascimento              DateTime?   @db.Date()
+  diaNascimento               Int?
+  mesNascimento               Int?
   cpf                         String?     @db.VarChar(20)
   rg                          String?     @db.VarChar(200)
   diagnosticoClinico          String?     @db.LongText

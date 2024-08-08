@@ -32,8 +32,7 @@ export interface FindClienteDto {
   email?: string;
   cpf?: string | null;
   rg?: string | null;
-  dataNascimentoStart?: Date | null;
-  dataNascimentoEnd?: Date | null;
+  dataAniversario?: string | null;
   skip?: number;
   take?: number;
 }

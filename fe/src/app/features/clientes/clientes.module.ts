@@ -10,6 +10,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { ClientesComponent } from './clientes.component';
 import { PageHeaderModule } from '../../components/page-header/page-header.module';
@@ -60,10 +62,12 @@ const routes: Routes = [
     MatIconModule,
     MatPaginatorModule,
     MatListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     PageHeaderModule,
     ButtonModule,
     HighchartsChartModule,
   ],
-  providers: [provideNgxMask(), {provide: MatPaginatorIntl, useClass: PaginatorService}],
+  providers: [provideNgxMask(), { provide: MatPaginatorIntl, useClass: PaginatorService }],
 })
 export class ClientesModule { }

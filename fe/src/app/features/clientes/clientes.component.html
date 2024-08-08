@@ -12,6 +12,13 @@
       <input matInput type="text" formControlName="email">
     </mat-form-field>
 
+    <mat-form-field appearance="outline">
+      <mat-label>Data Aniversário</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dataAniversario">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
     <div class="filtro__actions">
       <button
         type="reset"
