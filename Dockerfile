@@ -1,9 +1,7 @@
-FROM node:18-alpine as install
+FROM node:18-alpine as api
 WORKDIR /usr/src/app
 COPY ./api/ .
 RUN npm ci --unsafe-perm
-
-FROM install as build
 RUN npx prisma generate
 RUN npm run build
 
@@ -18,9 +16,9 @@ RUN npm run build
 
 FROM node:18-alpine as production
 
-COPY --from=build /usr/src/app/node_modules/ ./node_modules/
-COPY --from=build /usr/src/app/prisma ./prisma
-COPY --from=build /usr/src/app/dist ./dist
+COPY --from=api /usr/src/app/node_modules/ ./node_modules/
+COPY --from=api /usr/src/app/prisma ./prisma
+COPY --from=api /usr/src/app/dist ./dist
 
 COPY ./fe/dist ./dist/fe
 # COPY --from=fe-build /usr/src/app/dist ./dist/fe
