@@ -31,10 +31,10 @@ export class EvolucaoService {
         data.clienteId,
       );
 
-      if (cliente.contadorEvolucoes % 15 === 0) {
+      if (cliente.contadorEvolucoes % 22 === 0) {
         await this.notificacaoService.create({
           tipo: 'CONTADOR_EVOLUCAO',
-          descricao: `${cliente.nome} totalizou 15 evoluções.`,
+          descricao: `${cliente.nome} totalizou 22 evoluções.`,
           conteudo: JSON.stringify({
             cliente,
             evolucao,

@@ -93,4 +93,23 @@
       </mat-form-field>
     </mat-card-content>
   </mat-card>
+
+  <br />
+
+  <mat-card *ngIf="editing">
+    <mat-card-header>
+      <mat-card-subtitle>Evoluções</mat-card-subtitle>
+    </mat-card-header>
+
+    <br />
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Total</mat-label>
+        <input readonly matInput formControlName="contadorEvolucoes" type="number">
+      </mat-form-field>
+
+      <app-button title="Zerar Contador" (click)="zerarContadorEvolucoes()"></app-button>
+    </mat-card-content>
+  </mat-card>
 </form>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { parse } from 'date-fns';
@@ -6,6 +6,7 @@ import { PasswordValidation } from '../../../helpers/password.validator';
 import { ClienteService } from '../../../services/cliente.service';
 import { AlertService } from '../../../services/alert/alert.service';
 import { Cliente, SaveClienteDTO } from '../../../interfaces/cliente';
+import { Subject, takeUntil } from 'rxjs';
 
 const formatDate = (date: Date) => {
   const noTimeDate = date.toString().slice(0, 10);
@@ -20,7 +21,7 @@ const formatDate = (date: Date) => {
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
-export class FormClienteComponent {
+export class FormClienteComponent implements OnInit, OnDestroy {
   form = this.formBuilder.group({
     nome: ['', Validators.required],
     telefone: [''],
@@ -33,6 +34,7 @@ export class FormClienteComponent {
     endereco: [''],
     diagnosticoClinico: [''],
     diagnosticoFisioterapeutico: [''],
+    contadorEvolucoes: [0],
   });
 
   editing = false;
@@ -41,6 +43,8 @@ export class FormClienteComponent {
   telefoneMask = '(000) 0 0000-0000||(000) 0000-0000';
   dateMask = 'd0/M0/0000';
   cpfMask = '000.000.000-00';
+
+  onDestroy$ = new Subject();
 
   constructor(
     private router: Router,
@@ -76,6 +80,11 @@ export class FormClienteComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    this.onDestroy$.next(null);
+    this.onDestroy$.complete();
+  }
+
   cancelar(): void {
     this.router.navigate(['clientes']);
   }
@@ -104,6 +113,7 @@ export class FormClienteComponent {
     if (this.editing) {
       this.clienteService
         .update(this.clienteId, data)
+        .pipe(takeUntil(this.onDestroy$))
         .subscribe({
           complete: () => {
             this.router.navigate(['clientes']);
@@ -113,6 +123,7 @@ export class FormClienteComponent {
     } else {
       this.clienteService
         .create(data)
+        .pipe(takeUntil(this.onDestroy$))
         .subscribe({
           complete: () => {
             this.router.navigate(['clientes']);
@@ -129,5 +140,23 @@ export class FormClienteComponent {
     } else {
       this.alertService.showError(title, error.message);
     }
+  }
+
+  zerarContadorEvolucoes(): void {
+    const title = 'Zerar contador de evoluções';
+    const message = `Essa operação não pode ser desfeita. Deseja realmente zerar o contador de evoluções?`;
+    this.alertService.showYesNo(title, message).then((result: boolean) => {
+      this.clienteService
+        .zerarContadorEvolucoes(this.clienteId)
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe({
+          complete: () => {
+            this.form.patchValue({
+              contadorEvolucoes: 0,
+            });
+          },
+          error: (error) => this.showError(error),
+        });
+    })
   }
 }

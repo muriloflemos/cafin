@@ -99,4 +99,9 @@ export class ClienteController {
 
     return { historico, avaliacoes };
   }
+
+  @Put(':id/zerar-contador-evolucoes')
+  zerarContadorEvolucoes(@Param('id') id: string) {
+    return this.clienteService.updateContadorEvolucao(Number(id), 0);
+  }
 }

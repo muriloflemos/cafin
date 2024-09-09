@@ -36,4 +36,8 @@ export class ClienteService {
   historico(id: number): Observable<{ historico: Historico[], avaliacoes: Avaliacao[] }> {
     return this.apiService.get<{ historico: Historico[], avaliacoes: Avaliacao[] }>(`${this.path}/historico/${id}`);
   }
+
+  zerarContadorEvolucoes(id: number): Observable<Cliente> {
+    return this.apiService.put<Cliente>(`${this.path}/${id}/zerar-contador-evolucoes`);
+  }
 }
